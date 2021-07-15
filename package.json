@@ -1,0 +1,21 @@
+{
+  "name": "kingdoms",
+  "version": "1.1.1",
+  "description": "Kingdoms Website and Discord Bot",
+  "main": "index.js",
+  "author": "Kingdoms Developers Team",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "discord-buttons": "^3.2.1",
+    "discord-oauth2": "^2.6.0",
+    "discord-oauth2-api": "^1.1.1",
+    "discord-slash-commands-client": "^1.2.1",
+    "discord.js": "^12.5.3",
+    "discord.js-commando": "^0.12.3",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "quickmongo": "^3.0.2"
+  }
+}

@@ -5,14 +5,7 @@ module.exports = {
   aliases: ['act', 'actions'],
   folder: 'kingdoms',
   description: 'Do an action!',
-  // cooldown: ,
-  // args: ['<action>'], // Already handle no arg provided below
-  // guild_only: ,
-  // owner_only: ,
-  // cooldowns: ,
-  // permissions: ,
   execute (message, args) {
-    // TODO: Actually export db in bot.js
     const { author: { id: author_id } } = message
     if (!args.length) return message.channel.send(new MessageEmbed().addField('Unlocked Actions:', 'repair|build|xp').setAuthor(message.author.username, message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 2048 })).setColor('6718ce'))
     const lastUsed = (timedUsers[author_id] - Date.now() + KINGDOM_EPOCH) / 1000 || 0

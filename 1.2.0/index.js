@@ -1,5 +1,3 @@
-// snake_case
-
 require('dotenv').config()
 
 const { readdirSync } = require('fs')
@@ -22,6 +20,7 @@ for (const folder of folders) {
 }
 
 client.once('ready', () => {
+  client.user.setActivity(`with your Kingdoms | Do ${prefix} help`)
   console.log(chalk.hex('#FFFFFF').bgHex('#007F00')('✅ [Bot]'))
 })
 
@@ -29,16 +28,16 @@ client.on('message', message => {
   if (!message.content.startsWith(prefix) || message.author.bot) return
 
   const args = message.content.slice(prefix.length).trim().split(/ +/)
-  const commandName = args.shift().toLowerCase()
-  const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName))
+  const command_name = args.shift().toLowerCase()
+  const command = client.commands.get(command_name) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command_name))
 
   if (!command) return
 
-  if (command.guildOnly && message.channel.type === 'dm') return message.reply('I can\'t execute that command inside DMs!')
+  if (command.guild_only && message.channel.type === 'dm') return message.reply('I can\'t execute that command inside DMs!')
 
   if (command.permissions) {
-    const authorPerms = message.channel.permissionsFor(message.author)
-    if (!authorPerms || !authorPerms.has(command.permissions)) return message.reply('You can not do this!')
+    const author_perms = message.channel.permissionsFor(message.author)
+    if (!author_perms || !author_perms.has(command.permissions)) return message.reply('You can not do this!')
   }
 
   if (command.args && !args.length) {
@@ -53,19 +52,19 @@ client.on('message', message => {
 
   const now = Date.now()
   const timestamps = cooldowns.get(command.name)
-  const cooldownAmount = (command.cooldown || 3) * 1000
+  const cooldown_amount = (command.cooldown || 3) * 1000
 
   if (timestamps.has(message.author.id)) {
-    const expirationTime = timestamps.get(message.author.id) + cooldownAmount
-    if (now < expirationTime) {
-      const timeLeft = (expirationTime - now) / 1000
-      return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`)
+    const expiration_time = timestamps.get(message.author.id) + cooldown_amount
+    if (now < expiration_time) {
+      const time_left = (expiration_time - now) / 1000
+      return message.reply(`please wait ${time_left.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`)
     }
   }
 
   timestamps.set(message.author.id, now)
 
-  setTimeout(() => timestamps.delete(message.author.id), cooldownAmount)
+  setTimeout(() => timestamps.delete(message.author.id), cooldown_amount)
 
   try {
     command.execute(message, args)

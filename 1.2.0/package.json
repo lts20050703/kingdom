@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "standard --fix --env browser --env jquery --global feather && node ."
+    "test": "standardx --fix --env browser --env jquery --global feather && node ."
   },
   "author": "",
   "license": "ISC",
@@ -12,5 +12,8 @@
     "chalk": "^4.1.1",
     "discord.js": "^12.5.3",
     "dotenv": "^10.0.0"
+  },
+  "devDependencies": {
+    "standardx": "^7.0.0"
   }
 }

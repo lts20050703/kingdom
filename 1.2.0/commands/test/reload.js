@@ -4,6 +4,7 @@ module.exports = {
   args: 1,
   usage: '<command name>',
   folder: 'test',
+  developer_only: true,
   execute (message, args) {
     const command_name = args[0].toLowerCase()
     const command = message.client.commands.get(command_name) || message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command_name))
@@ -14,7 +15,7 @@ module.exports = {
 
     // Update to v1.1.3.2 (Beta)
     if (!command.folder) {
-      return message.channel.send('Please update to v1.1.3.2 (Beta)\nProperty `folder: ` missing')
+      return message.channel.send(`Version >=1.1.3.2 requires \`folder: \` in ${command_name}.js`)
     }
 
     delete require.cache[require.resolve(`../${command.folder}/${command.name}.js`)]

@@ -2,7 +2,7 @@ require('dotenv').config()
 
 const { readdirSync } = require('fs')
 const { Client, Collection } = require('discord.js')
-const { prefix } = require('./config.json')
+const { prefix, developers } = require('./config.json')
 const chalk = require('chalk')
 const client = new Client()
 
@@ -33,6 +33,8 @@ client.on('message', message => {
 
   if (!command) return
 
+  if (command.developer_only && !developers.includes(message.author.id)) return message.channel.send('Only developers can run this command!')
+
   if (command.guild_only && message.channel.type === 'dm') return message.reply('I can\'t execute that command inside DMs!')
 
   if (command.permissions) {
@@ -46,12 +48,16 @@ client.on('message', message => {
     return message.channel.send(reply)
   }
 
-  const { cooldowns } = client
+  if (command.args && args.length < command.args) {
+    let reply = `You didn't provide enough arguments, ${message.author}!`
+    if (command.usage) reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``
+    return message.channel.send(reply)
+  }
 
-  if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Collection())
+  if (!client.cooldowns.has(command.name)) client.cooldowns.set(command.name, new Collection())
 
   const now = Date.now()
-  const timestamps = cooldowns.get(command.name)
+  const timestamps = client.cooldowns.get(command.name)
   const cooldown_amount = (command.cooldown || 3) * 1000
 
   if (timestamps.has(message.author.id)) {

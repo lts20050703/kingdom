@@ -1,12 +1,12 @@
 {
   "name": "kingdoms",
-  "version": "1.2.0",
-  "description": "",
+  "version": "1.1.3.3",
+  "description": "kingdoms Website and Discord Bot",
   "main": "index.js",
   "scripts": {
     "test": "standardx --fix --env browser --env jquery --global feather && node ."
   },
-  "author": "",
+  "author": "Kingdoms Developers",
   "license": "ISC",
   "dependencies": {
     "chalk": "^4.1.1",

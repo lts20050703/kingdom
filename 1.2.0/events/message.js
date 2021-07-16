@@ -1,8 +1,7 @@
-const { Collection } = require('discord.js')
 const { prefixes, developers } = require('../config.json')
 
 module.exports = {
-  name: 'ready',
+  name: 'message',
   once: false,
   execute (message, bot) {
     if (message.author.bot) return
@@ -28,23 +27,20 @@ module.exports = {
     // TODO PLEASE HANDLE ARUGUMENT IN EACH COMMAND
     // if (command.args && args.length < command.args.length) return message.channel.send(`You didn't provide ${args.length ? 'enough' : 'any'} arguments, ${message.author}!\nThe proper usage would be: \`${prefix}${command.name} ${command.args.join(' ')}\``)
 
-    if (!bot.cooldowns.has(command.name)) bot.cooldowns.set(command.name, new Collection())
-
     const now = Date.now()
-    const timestamps = bot.cooldowns.get(command.name)
     const cooldown_amount = (command.cooldown || 3) * 1000
 
-    if (timestamps.has(message.author.id)) {
-      const expiration_time = timestamps.get(message.author.id) + cooldown_amount
+    if (bot.db.cooldowns.has(`${command.name}.${message.author.id}`)) {
+      const expiration_time = bot.db.cooldowns.get(`${command.name}.${message.author.id}`) + cooldown_amount
       if (now < expiration_time) {
         const time_left = (expiration_time - now) / 1000
         return message.reply(`Sorry, this command is on cooldown. Please try again in ${time_left.toFixed(1)}`)
       }
     }
 
-    timestamps.set(message.author.id, now)
+    bot.db.cooldowns.set(`${command.name}.${message.author.id}`, now)
 
-    setTimeout(() => timestamps.delete(message.author.id), cooldown_amount)
+    setTimeout(() => bot.db.cooldowns.delete(`${command.name}.${message.author.id}`), cooldown_amount)
 
     try {
       command.execute(message, args)

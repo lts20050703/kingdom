@@ -1,4 +1,4 @@
-const { prefix } = require('../../config.json')
+const { prefixes } = require('../../config.json')
 
 module.exports = {
   name: 'help',
@@ -13,7 +13,7 @@ module.exports = {
     if (!args.length) {
       data.push('Here\'s a list of all my commands:')
       data.push(commands.filter(command => !command.developer_only).map(command => command.name).join(', '))
-      data.push(`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`)
+      data.push(`\nYou can send \`${prefixes[0]}help [command name]\` to get info on a specific command!`)
 
       return message.channel.send(data, { split: true })
     }

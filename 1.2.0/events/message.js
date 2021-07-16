@@ -1,4 +1,4 @@
-const { prefixes, developers } = require('../config.json')
+const { prefixes, owners } = require('../config.json')
 
 module.exports = {
   name: 'message',
@@ -15,7 +15,9 @@ module.exports = {
 
     if (!command) return
 
-    if (command.developer_only && !developers.includes(message.author.id)) return message.channel.send('Only developers can run this command!')
+    if (!command.run) return message.channel.send('Someone forgot to add `run (message, args): {}`')
+
+    if (command.owner_only && !owners.includes(message.author.id)) return message.channel.send(`The \`${command.name}\` command can only be used by the bot owner.`)
 
     if (command.guild_only && message.channel.type === 'dm') return message.reply('I can\'t execute that command inside DMs!')
 
@@ -43,7 +45,7 @@ module.exports = {
     setTimeout(() => bot.db.cooldowns.delete(`${command.name}.${message.author.id}`), cooldown_amount)
 
     try {
-      command.execute(message, args)
+      command.run(message, args)
     } catch (error) {
       console.error(error)
       message.reply('there was an error trying to execute that command!')

@@ -31,6 +31,17 @@ for (const folder of folders) {
   const files = readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'))
   for (const file of files) {
     const command = require(`./commands/${folder}/${file}`)
+    // Checker
+    if (!command.name) {
+      console.log(chalk.hex('#FFFFFF').bgHex('#7F0000')(`[${file}] name:"${file.slice(0, -3)}" missing! The command will not be registered!`))
+      continue
+    }
+    if (!command.run) {
+      console.log(chalk.hex('#FFFFFF').bgHex('#7F0000')(`[${file}] run (message, args):{} missing! The command will not be able to run!.`))
+    }
+    if (!command.group) {
+      console.log(chalk.hex('#FFFFFF').bgHex('#7F0000')(`[${file}] group: "${folder}" missing!`))
+    }
     bot.commands.set(command.name, command)
   }
 }

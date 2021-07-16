@@ -1,12 +1,11 @@
 const { prefixes } = require('../../config.json')
 
 module.exports = {
+  group: 'test',
   name: 'help',
   aliases: ['commands'],
   description: 'List all of my commands or info about a specific command.',
-  folder: 'test',
-  cooldown: 5,
-  execute (message, args) {
+  run (message, args) {
     const data = []
     const { commands } = message.client
 

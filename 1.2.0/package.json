@@ -1,6 +1,6 @@
 {
   "name": "kingdoms",
-  "version": "1.1.3.4",
+  "version": "1.2.0",
   "description": "kingdoms Website and Discord Bot",
   "main": "index.js",
   "scripts": {

@@ -2,7 +2,7 @@ require('dotenv').config()
 
 const { readdirSync } = require('fs')
 const { Client, Collection } = require('discord.js')
-const { prefix, developers } = require('./config.json')
+const { prefixes, developers } = require('./config.json')
 const chalk = require('chalk')
 const bot = new Client()
 
@@ -20,12 +20,15 @@ for (const folder of folders) {
 }
 
 bot.once('ready', () => {
-  bot.user.setActivity(`with your Kingdoms | Do ${prefix} help`)
+  bot.user.setActivity(`with your Kingdoms | Do ${prefixes[0]} help`)
   console.log(chalk.hex('#FFFFFF').bgHex('#007F00')('✅ [Bot]'))
 })
 
 bot.on('message', message => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return
+  if (message.author.bot) return
+  let prefix
+  prefixes.forEach(_prefix => { if (message.content.startsWith(_prefix)) prefix = _prefix })
+  if (!prefix) return
 
   const args = message.content.slice(prefix.length).trim().split(/ +/)
   const command_name = args.shift().toLowerCase()
@@ -42,7 +45,8 @@ bot.on('message', message => {
     if (!author_perms || !author_perms.has(command.permissions)) return message.reply('You can not do this!')
   }
 
-  if (command.args && args.length < command.args.length) return message.channel.send(`You didn't provide ${args.length ? 'enough' : 'any'} arguments, ${message.author}!\nThe proper usage would be: \`${prefix}${command.name} ${command.args.join(' ')}\``)
+  // TODO PLEASE HANDLE ARUGUMENT IN EACH COMMAND
+  // if (command.args && args.length < command.args.length) return message.channel.send(`You didn't provide ${args.length ? 'enough' : 'any'} arguments, ${message.author}!\nThe proper usage would be: \`${prefix}${command.name} ${command.args.join(' ')}\``)
 
   if (!bot.cooldowns.has(command.name)) bot.cooldowns.set(command.name, new Collection())
 

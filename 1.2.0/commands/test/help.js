@@ -4,7 +4,6 @@ module.exports = {
   name: 'help',
   aliases: ['commands'],
   description: 'List all of my commands or info about a specific command.',
-  usage: '[command name]',
   folder: 'test',
   cooldown: 5,
   execute (message, args) {
@@ -29,7 +28,8 @@ module.exports = {
 
     if (command.aliases) data.push(`**Aliases:** ${command.aliases.join(', ')}`)
     if (command.description) data.push(`**Description:** ${command.description}`)
-    if (command.args) data.push(`**Usage:** ${prefix}${command.name} ${command.args.join(' ')}`)
+    // TODO settle on arguments
+    // if (command.args) data.push(`**Usage:** ${prefix}${command.name} ${command.args.join(' ')}`)
 
     data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`)
 

@@ -6,6 +6,7 @@
   "author": "Kingdoms Developers Team",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^4.1.1",
     "cookie-parser": "^1.4.5",
     "discord-buttons": "^3.2.1",
     "discord-oauth2": "^2.6.0",

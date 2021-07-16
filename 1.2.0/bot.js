@@ -71,3 +71,5 @@ bot.on('message', message => {
 })
 
 bot.login(process.env.token)
+// checked by chriscj 15/07/21
+// smart, I love the ? enough : any

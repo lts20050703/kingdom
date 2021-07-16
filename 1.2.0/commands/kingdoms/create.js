@@ -1,4 +1,4 @@
-const { colors, gen_id } = require('../../index')
+const { colors, gen_id } = require('../../libraries')
 
 module.exports = {
   group: 'kingdoms',

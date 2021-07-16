@@ -1,15 +1,15 @@
 const { readdirSync } = require('fs')
 const { Client, Collection } = require('discord.js')
 const { Database } = require('quickmongo')
-const chalk = require('chalk')
+const { green, red, yellow } = require('./libraries')
 const bot = new Client()
 
 bot.commands = new Collection()
 
 bot.db = new Database(process.env.db)
 
-bot.db.on('ready', () => console.log(chalk.hex('#FFFFFF').bgHex('#007F00')('✅ [Database] Connected to MongoDB!')))
-bot.db.on('error', error => console.error(chalk.hex('#FFFFFF').bgHex('#7F0000')(`❌ [Database] Error: ${error}`)))
+bot.db.on('ready', () => console.error(green('✅ [Database] Connected to MongoDB!')))
+bot.db.on('error', error => console.error(red(`❌ [Database] Error: ${error}`)))
 
 bot.db.users = bot.db.createModel('users')
 bot.db.kingdoms = bot.db.createModel('kingdoms')
@@ -33,14 +33,14 @@ for (const folder of folders) {
     const command = require(`./commands/${folder}/${file}`)
     // Checker
     if (!command.name) {
-      console.log(chalk.hex('#FFFFFF').bgHex('#7F0000')(`[${file}] name:"${file.slice(0, -3)}" missing! The command will not be registered!`))
+      console.log(yellow(`[${file}] name:"${file.slice(0, -3)}" missing! The command will not be registered!`))
       continue
     }
     if (!command.run) {
-      console.log(chalk.hex('#FFFFFF').bgHex('#7F0000')(`[${file}] run (message, args):{} missing! The command will not be able to run!.`))
+      console.log(yellow(`[${file}] run (message, args):{} missing! The command will not be able to run!.`))
     }
     if (!command.group) {
-      console.log(chalk.hex('#FFFFFF').bgHex('#7F0000')(`[${file}] group: "${folder}" missing!`))
+      console.log(yellow(`[${file}] group: "${folder}" missing!`))
     }
     bot.commands.set(command.name, command)
   }

@@ -10,7 +10,7 @@ module.exports = {
     if (!args.length) return message.channel.send(new MessageEmbed().addField('Unlocked Actions:', 'repair|build|xp').setAuthor(message.author.username, message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 2048 })).setColor('6718ce'))
     const lastUsed = (timedUsers[author_id] - Date.now() + KINGDOM_EPOCH) / 1000 || 0
     if (lastUsed > 0) return message.channel.send(`Sorry, this command is on cooldown. Please try again in ${Math.floor((timedUsers[author_id] + KINGDOM_EPOCH - Date.now()) / 100) / 10}`)
-    const IN_CLAN = true
+    const in_clan = true
     // resources and exp should be set according to real vars
     const exp = 13
     let count = 5
@@ -36,14 +36,14 @@ module.exports = {
       case 'xp':
       case 'exp':
       case 'experience':
-        r = acting('xp', count, exp, IN_CLAN)
+        r = acting('xp', count, exp, in_clan)
         break
       case 'build':
-        r = acting('build', count, exp, IN_CLAN)
+        r = acting('build', count, exp, in_clan)
         break
       case 'repair':
       case 'heal':
-        r = acting('repair', count, exp, IN_CLAN)
+        r = acting('repair', count, exp, in_clan)
         break
     }
     if (r[0]) timedUsers[author_id] = Date.now() - KINGDOM_EPOCH + 30000

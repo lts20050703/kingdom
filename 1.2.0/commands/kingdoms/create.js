@@ -1,4 +1,4 @@
-const { COLORS, GEN_ID } = require('../../index')
+const { colors, gen_id } = require('../../index')
 
 module.exports = {
   group: 'kingdoms',
@@ -11,55 +11,55 @@ module.exports = {
     users.get(`${USER_ID}.kingdom`).then(kingdom => {
       if (kingdom) return message.say(':angry: Not so fast! You\'re currently on a Kingdom. If you want to create your own kingdom, leave that first.')
     })
-    const KINGDOM_ID = GEN_ID(10)
-    const KINGDOM_NAME = args.join('-')
+    const kingdom_id = gen_id(10)
+    const kingdom_name = args.join('-')
     general.get('kingdoms').then(kingdoms => {
       console.log('running check')
       kingdoms.forEach(async kingdom => {
-        const NAME = await kingdoms.get(`${kingdom}.name`)
-        if (KINGDOM_NAME.toLowerCase() === NAME.toLowerCase()) {
+        const name = await kingdoms.get(`${kingdom}.name`)
+        if (kingdom_name.toLowerCase() === name.toLowerCase()) {
           return message.channel.send(':police_officer: That name is taken. Come up with an original name, please.')
         }
-        if (!/^[a-zA-Z0-9-_]+$/.test(KINGDOM_NAME)) {
+        if (!/^[a-zA-Z0-9-_]+$/.test(kingdom_name)) {
           return message.channel.send('Name is invalid. It must be 3-19 characters with A-Z/-_')
         }
-        if (KINGDOM_NAME.length < 3) {
+        if (kingdom_name.length < 3) {
           return message.channel.send('Please specify a name. A good name has to be 3-19 characters long.')
         }
-        if (KINGDOM_NAME.length > 20) {
+        if (kingdom_name.length > 20) {
           return message.channel.send('Wait. That\'s too long! Wayy too long. Please take a shorter name, 20+ characters is wayyyy too much trust me.')
         }
       })
     })
-    message.channel.send(`😇 Just need a second to create your kingdom. ID: ${KINGDOM_ID}`)
-    const COLOR = Math.floor(Math.random() * COLORS.ID.length)
-    const ROLES = []
-    ROLES.push(await message.guild.create({ data: { name: `${KINGDOM_ID} ≼🔅Member≽`, color: COLORS.ID[COLOR] } }))
-    ROLES.push(await message.guild.create({ data: { name: `${KINGDOM_ID} ≪💠Guard/king≫`, color: COLORS.ID[COLOR] } }))
-    ROLES.push(await message.guild.create({ data: { name: `${KINGDOM_ID} ⋘🔶King⋙`, color: COLORS.ID[COLOR] } }))
-    const PUBLIC = [{ id: ROLES[1], allow: ['ATTACH_FILES', 'EMBED_LINKS'] }, { id: message.guild.roles.everyone, deny: ['MENTION_EVERYONE', 'ATTACH_FILES', 'EMBED_LINKS'] }]
-    const BASIC = [{ id: ROLES[1], allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'MENTION_EVERYONE'] }, { id: ROLES[0], allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'] }, { id: message.guild.roles.everyone, deny: ['VIEW_CHANNEL', 'SEND_MESSAGES'] }]
-    const RESTRICTED = [{ id: ROLES[1], allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'MENTION_EVERYONE'] }, { id: message.guild.roles.everyone, deny: ['VIEW_CHANNEL', 'SEND_MESSAGES'] }]
-    const LOCKED = [{ id: ROLES[1], allow: ['ADD_REACTIONS', 'VIEW_CHANNEL'] }, { id: ROLES[0], allow: ['ADD_REACTIONS', 'VIEW_CHANNEL'] }, { id: message.guild.roles.everyone, deny: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'ATTACH_FILES', 'EMBED_LINKS'] }]
-    let category = await autoProcessesChannelAdd([['category', COLORS.CIRCLE[COLOR] + KINGDOM_NAME, false, 'Creating clan ' + KINGDOM_NAME, RESTRICTED]], message.guild)
+    message.channel.send(`😇 Just need a second to create your kingdom. ID: ${kingdom_id}`)
+    const color = Math.floor(Math.random() * colors.id.length)
+    const roles = []
+    roles.push(await message.guild.create({ data: { name: `${kingdom_id} ≼🔅Member≽`, color: colors.id[color] } }))
+    roles.push(await message.guild.create({ data: { name: `${kingdom_id} ≪💠Guard/king≫`, color: colors.id[color] } }))
+    roles.push(await message.guild.create({ data: { name: `${kingdom_id} ⋘🔶King⋙`, color: colors.id[color] } }))
+    const public_permission = [{ id: roles[1], allow: ['ATTACH_FILES', 'EMBED_LINKS'] }, { id: message.guild.roles.everyone, deny: ['MENTION_EVERYONE', 'ATTACH_FILES', 'EMBED_LINKS'] }]
+    const basic_permission = [{ id: roles[1], allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'MENTION_EVERYONE'] }, { id: roles[0], allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'] }, { id: message.guild.roles.everyone, deny: ['VIEW_CHANNEL', 'SEND_MESSAGES'] }]
+    const restricted_permission = [{ id: roles[1], allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'MENTION_EVERYONE'] }, { id: message.guild.roles.everyone, deny: ['VIEW_CHANNEL', 'SEND_MESSAGES'] }]
+    const locked_permission = [{ id: roles[1], allow: ['ADD_REACTIONS', 'VIEW_CHANNEL'] }, { id: roles[0], allow: ['ADD_REACTIONS', 'VIEW_CHANNEL'] }, { id: message.guild.roles.everyone, deny: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'ATTACH_FILES', 'EMBED_LINKS'] }]
+    let category = await autoProcessesChannelAdd([['category', colors.circle[color] + kingdom_name, false, 'Creating clan ' + kingdom_name, restricted_permission]], message.guild)
     category = category[0]
 
     await autoProcessesChannelAdd([
-      ['text', '🎯main', `${COLORS.BOOK[COLOR]} main info channel for your clan made by ${message.author.tag}`, 'Creating clan ' + KINGDOM_NAME, LOCKED, category.id],
-      ['text', COLORS.BOOK[COLOR] + 'chat', `Main channel for clan ${KINGDOM_NAME}`, 'Creating clan ' + KINGDOM_NAME, BASIC, category.id],
-      ['text', COLORS.SQUARE[COLOR] + 'chat seargent', `Chat channel for clan ${KINGDOM_NAME}`, 'Creating clan ' + KINGDOM_NAME, RESTRICTED, category.id],
-      ['text', COLORS.HEART[COLOR] + 'border', `Border channel for clan ${KINGDOM_NAME}`, 'Creating clan ' + KINGDOM_NAME, PUBLIC, category.id]
+      ['text', '🎯main', `${colors.book[color]} main info channel for your clan made by ${message.author.tag}`, 'Creating clan ' + kingdom_name, locked_permission, category.id],
+      ['text', colors.book[color] + 'chat', `Main channel for clan ${kingdom_name}`, 'Creating clan ' + kingdom_name, basic_permission, category.id],
+      ['text', colors.square[color] + 'chat seargent', `Chat channel for clan ${kingdom_name}`, 'Creating clan ' + kingdom_name, restricted_permission, category.id],
+      ['text', colors.heart[color] + 'border', `Border channel for clan ${kingdom_name}`, 'Creating clan ' + kingdom_name, public_permission, category.id]
     ], message.guild)
-    await message.member.roles.add(ROLES[2])
-    await users.set(USER_ID + '.kingdom', KINGDOM_ID)
+    await message.member.roles.add(roles[2])
+    await users.set(USER_ID + '.kingdom', kingdom_id)
     await users.set(USER_ID + '.role', 3)
-    await general.push('kingdoms', KINGDOM_ID)
-    await kingdoms.set(KINGDOM_ID + '.name', KINGDOM_NAME)
-    await kingdoms.set(KINGDOM_ID + '.color', COLOR)
-    await kingdoms.push(KINGDOM_ID + '.members', USER_ID)
-    await kingdoms.set(KINGDOM_ID + '.owner', USER_ID)
-    await kingdoms.set(KINGDOM_ID + '.category', category.id)
-    await kingdoms.set(KINGDOM_ID + '.creationDate', (Date.now()))
+    await general.push('kingdoms', kingdom_id)
+    await kingdoms.set(kingdom_id + '.name', kingdom_name)
+    await kingdoms.set(kingdom_id + '.color', color)
+    await kingdoms.push(kingdom_id + '.members', USER_ID)
+    await kingdoms.set(kingdom_id + '.owner', USER_ID)
+    await kingdoms.set(kingdom_id + '.category', category.id)
+    await kingdoms.set(kingdom_id + '.creationDate', (Date.now()))
   }
 }
 

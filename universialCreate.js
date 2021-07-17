@@ -60,8 +60,9 @@ async function autoProcessesChannelAdd (channels, g) {
   return Promise.all(newChans)
 }
 
-async function createKingdom(user, name, from, message) {
+async function createKingdom(client, user, name, from, message) {
   var userID = user
+  var bot = client
   name = name.split(' ')
   // if from = 1 -> requested from bot
   // if from = 2 -> requested from website
@@ -70,15 +71,15 @@ async function createKingdom(user, name, from, message) {
       if(from==1) return message.channel.send(':angry: Not so fast! You\'re currently on a Kingdom. If you want to create your own kingdom, leave that first.')
       if(from==2) return {status: 'error', message: 'You are already on a Kingdom!'}
     }
-    const newKingdomID = genID(10)
+    var newKingdomId = genID(10)
     //chriscreateCommand(message, name.split(' '), this.client, newKingdomID, db)
     // Message.say("chris will now create ur super cool kingdom with the ID "+newKingdomId)
     if(from==1) {
-    const mb = message.member
-    const ch = message.channel
+      var mb = message.member
+      var ch = message.channel
     } else {
       var guild = client.guilds.cache.get('528602970569441282') // get the guild object
-      const mb = guild.member(user)
+      var mb = guild.member(user)
     }
     const g = client.guilds.cache.get('528602970569441282')
     if (!g.available) {
@@ -99,21 +100,22 @@ async function createKingdom(user, name, from, message) {
     const kgdName = args.join('-')
     // TODO: Check if this name is already taken
     general.get('kingdoms').then(async allkingdoms => {
-      let allowed = true
+      var allowed = true
       if (allkingdoms) {
         console.log('running check')
-        allkingdoms.forEach(async kd => {
-          const thisName = await kingdoms.get(kd + '.name')
+        for(const kd of allkingdoms) {
+          var thisName = await kingdoms.get(kd + '.name')
           console.log('name chosen: ' + kgdName + ' other kingdom name: ' + thisName)
           if (thisName.toLowerCase() === kgdName.toLowerCase()) {
             allowed = false
             console.log('set to false!')
+
           }
-        })
+        }
       }
 
       if (!allowed) {
-        if(from==1) return message.channel.send(ch, ':police_officer: That name is taken. Come up with an original name, please.')
+        if(from==1) return message.channel.send(':police_officer: That name is taken. Come up with an original name, please.')
         if(from==2) return {status:'error', message: 'That name is taken. Come up with an original name, please.'}
       }
 
@@ -141,7 +143,7 @@ async function createKingdom(user, name, from, message) {
       if(from==1) ch.send(`😇 Just need a second to create your kingdom. ID: ${newKingdomId}`)
 
       const color = Math.floor(Math.random() * colors.id.length)
-      const rid = newKingdomId
+      var rid = newKingdomId
       const r1 = await g.roles.create({ data: { name: rid + ' ≼🔅Member≽', color: colors.id[color], hoist: true } })
       const r2 = await g.roles.create({ data: { name: rid + ' ≪💠Guard/king≫', color: colors.id[color] } })
       // Let r3 = await g.roles.create({ data: { name: rid+' ⋘🔶King⋙',color:color_roles[color]}});
@@ -172,7 +174,7 @@ async function createKingdom(user, name, from, message) {
         if(from==2) return {status: 'error', message: 'There was an error trying to save to the database.'}
       })
     }).catch(e => {
-      if(from==1) return send(ch, 'Oof. There was an error `' + e + '`')
+      if(from==1) return ch.send('Oof. There was an error `' + e + '`')
         if(from==2) return {status: 'error', message: 'There was an error.'}
     })
   })

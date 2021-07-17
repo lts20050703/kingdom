@@ -27,7 +27,7 @@ module.exports = class create extends Command {
     })
   }
 
-  run (message, { name }) {
+  async run (message, { name }) {
     const { createKingdom } = require('../../universialCreate.js')
     const { db } = this.client
     const users = db.createModel('users')
@@ -36,7 +36,7 @@ module.exports = class create extends Command {
     // eslint-disable-next-line no-unused-vars
     const general = db.createModel('general')
     const userID = message.author.id
-    createKingdom(userID, name, 1, message)
+    await createKingdom(this.client, userID, name, 1, message)
     /*
     users.get(`${userID}.kingdom`).then(result => {
       if (result) {

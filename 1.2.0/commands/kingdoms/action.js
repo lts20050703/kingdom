@@ -5,7 +5,7 @@ module.exports = {
   name: 'action',
   aliases: ['act', 'actions'],
   description: 'Do an action!',
-  run (message, args) {
+  run (message, args, bot) {
     const { author: { id: author_id } } = message
     if (!args.length) return message.channel.send(new MessageEmbed().addField('Unlocked Actions:', 'repair|build|xp').setAuthor(message.author.username, message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 2048 })).setColor('6718ce'))
     const lastUsed = (timedUsers[author_id] - Date.now() + KINGDOM_EPOCH) / 1000 || 0

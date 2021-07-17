@@ -26,9 +26,6 @@ module.exports = {
       if (!author_perms || !author_perms.has(command.permissions)) return message.reply('You can not do this!')
     }
 
-    // TODO PLEASE HANDLE ARUGUMENT IN EACH COMMAND
-    // if (command.args && args.length < command.args.length) return message.channel.send(`You didn't provide ${args.length ? 'enough' : 'any'} arguments, ${message.author}!\nThe proper usage would be: \`${prefix}${command.name} ${command.args.join(' ')}\``)
-
     const now = Date.now()
     const cooldown_amount = (command.cooldown || 3) * 1000
 
@@ -45,7 +42,7 @@ module.exports = {
     setTimeout(() => bot.db.cooldowns.delete(`${command.name}.${message.author.id}`), cooldown_amount)
 
     try {
-      command.run(message, args)
+      command.run(message, args, bot)
     } catch (error) {
       console.error(error)
       message.reply('there was an error trying to execute that command!')

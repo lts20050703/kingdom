@@ -5,38 +5,47 @@ module.exports = {
   name: 'create',
   description: 'Create your epic kingdom!',
   guild_only: true,
-  async run (message, args) {
+  async run (message, args, bot) {
     message.channel.send('Under migration')
-    const { client: { db: { users, kingdoms, general } }, author: { id: USER_ID } } = message
-    users.get(`${USER_ID}.kingdom`).then(kingdom => {
-      if (kingdom) return message.say(':angry: Not so fast! You\'re currently on a Kingdom. If you want to create your own kingdom, leave that first.')
+    const { db: { users, kingdoms, general } } = bot
+    const { author: { id: user_id } } = message
+    let reply
+
+    // Check in kingdom
+    await users.get(`${user_id}.kingdom`).then(kingdom => {
+      if (kingdom) reply = ':angry: Not so fast! You\'re currently on a Kingdom. If you want to create your own kingdom, leave that first.'
     })
+    if (reply) return message.channel.send(reply)
+
     const kingdom_id = gen_id(10)
     const kingdom_name = args.join('-')
-    general.get('kingdoms').then(kingdoms => {
-      console.log('running check')
-      kingdoms.forEach(async kingdom => {
-        const name = await kingdoms.get(`${kingdom}.name`)
-        if (kingdom_name.toLowerCase() === name.toLowerCase()) {
-          return message.channel.send(':police_officer: That name is taken. Come up with an original name, please.')
-        }
-        if (!/^[a-zA-Z0-9-_]+$/.test(kingdom_name)) {
-          return message.channel.send('Name is invalid. It must be 3-19 characters with A-Z/-_')
-        }
-        if (kingdom_name.length < 3) {
-          return message.channel.send('Please specify a name. A good name has to be 3-19 characters long.')
-        }
-        if (kingdom_name.length > 20) {
-          return message.channel.send('Wait. That\'s too long! Wayy too long. Please take a shorter name, 20+ characters is wayyyy too much trust me.')
-        }
-      })
+    await general.get('kingdoms').then(all_kingdoms => {
+      if (all_kingdoms) {
+        all_kingdoms.forEach(async kingdom => {
+          const name = await kingdoms.get(`${kingdom}.name`)
+          if (kingdom_name.toLowerCase() === name.toLowerCase()) reply = ':police_officer: That name is taken. Come up with an original name, please.'
+        })
+      }
     })
+
+    if (reply) return message.channel.send(reply)
+
+    if (!/^[a-zA-Z0-9-_]+$/.test(kingdom_name)) {
+      return message.channel.send('Name is invalid. It must be 3-19 characters with A-Z/-_')
+    }
+    if (kingdom_name.length < 3) {
+      return message.channel.send('Please specify a name. A good name has to be 3-19 characters long.')
+    }
+    if (kingdom_name.length > 20) {
+      return message.channel.send('Wait. That\'s too long! Wayy too long. Please take a shorter name, 20+ characters is wayyyy too much trust me.')
+    }
+
     message.channel.send(`😇 Just need a second to create your kingdom. ID: ${kingdom_id}`)
     const color = Math.floor(Math.random() * colors.id.length)
 
-    const member = await message.guild.create({ data: { name: `${kingdom_id} ≼🔅Member≽`, color: colors.id[color] } })
+    const member = await message.guild.roles.create({ data: { name: `${kingdom_id} ≼🔅Member≽`, color: colors.id[color] } })
 
-    const guard_king = await message.guild.create({ data: { name: `${kingdom_id} ≪💠Guard/king≫`, color: colors.id[color] } })
+    const guard_king = await message.guild.roles.create({ data: { name: `${kingdom_id} ≪💠Guard/king≫`, color: colors.id[color] } })
 
     const public_permission = [{ id: guard_king, allow: ['ATTACH_FILES', 'EMBED_LINKS'] }, { id: message.guild.roles.everyone, deny: ['MENTION_EVERYONE', 'ATTACH_FILES', 'EMBED_LINKS'] }]
 
@@ -56,15 +65,16 @@ module.exports = {
       ['text', colors.heart[color] + 'border', `Border channel for clan ${kingdom_name}`, 'Creating clan ' + kingdom_name, public_permission, category.id]
     ], message.guild)
     await message.member.roles.add(guard_king)
-    await users.set(USER_ID + '.kingdom', kingdom_id)
-    await users.set(USER_ID + '.role', 3)
+    await users.set(user_id + '.kingdom', kingdom_id)
+    await users.set(user_id + '.role', 3)
     await general.push('kingdoms', kingdom_id)
     await kingdoms.set(kingdom_id + '.name', kingdom_name)
     await kingdoms.set(kingdom_id + '.color', color)
-    await kingdoms.push(kingdom_id + '.members', USER_ID)
-    await kingdoms.set(kingdom_id + '.owner', USER_ID)
+    await kingdoms.push(kingdom_id + '.members', user_id)
+    await kingdoms.set(kingdom_id + '.owner', user_id)
     await kingdoms.set(kingdom_id + '.category', category.id)
     await kingdoms.set(kingdom_id + '.creationDate', (Date.now()))
+    message.channel.send(`☑ I've created your kingdom:  ${colors.square[color]} **${kingdom_name}**`)
   }
 }
 

@@ -26,6 +26,7 @@ module.exports = class create extends Command {
         const result = await users.get(userID)
         const role = result.role
         const kingdomInfo = await kingdoms.get(result.kingdom)
+        console.log(kingdomInfo)
         if (role === 3 && kingdomInfo.owner === message.author.id) {
           message.channel.send(`:question: Are you sure you want to disband and DELETE your kingdom, ${colors.circle[kingdomInfo.color]} **${kingdomInfo.name}**? This action cannot be UNDONE!! All the Kingdom CHANNELS, STATS, ETC will be PERMANENTLY DELETED!!!! Type \`I understand that this action cannot be undone [kingdomName]\` (case sensitive) to confirm the deletion of your kingdom.`).then(() => {
             const filter = m => message.author.id === m.author.id

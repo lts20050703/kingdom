@@ -17,6 +17,8 @@ client.on('ready', async () => {
   console.log(`✅ [Bot] Logged in as ${client.user.tag}!`)
 })
 
+// Dont put this below client.registry
+
 client.registry
   .registerDefaultTypes()
   .registerGroups(groups)
@@ -28,4 +30,5 @@ client.registry
   })
   .registerCommandsIn(require('path').join(__dirname, '/commands'))
 
-module.exports = { bot: client }
+  module.exports = { bot: client }
+

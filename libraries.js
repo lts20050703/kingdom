@@ -57,7 +57,7 @@ module.exports = {
   },
   // embedGen(message.channel, `title`, [{name:`field title`,value:`field name`,inline:false}], [message.author.username], `footer`, 41215)
 
-  TimeToText (input, inputType = 's', format = 'NORMAL', precise = false, outputLims = false) {
+  timeToText (input, inputType = 's', format = 'NORMAL', precise = false, outputLims = false) {
     if (inputType === 'ms' && !precise) input = Math.floor(input / 1000)
     if (inputType === 'ms' && precise) input = input / 1000
 

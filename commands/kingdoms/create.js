@@ -28,6 +28,7 @@ module.exports = class create extends Command {
   }
 
   run (message, { name }) {
+    const { createKingdom } = require('../../universialCreate.js')
     const { db } = this.client
     const users = db.createModel('users')
     // eslint-disable-next-line no-unused-vars
@@ -35,6 +36,8 @@ module.exports = class create extends Command {
     // eslint-disable-next-line no-unused-vars
     const general = db.createModel('general')
     const userID = message.author.id
+    createKingdom(userID, name, 1, message)
+    /*
     users.get(`${userID}.kingdom`).then(result => {
       if (result) {
         return message.say(':angry: Not so fast! You\'re currently on a Kingdom. If you want to create your own kingdom, leave that first.')
@@ -45,6 +48,7 @@ module.exports = class create extends Command {
       chriscreateCommand(message, name.split(' '), this.client, newKingdomID, db)
       // Message.say("chris will now create ur super cool kingdom with the ID "+newKingdomId)
     })
+    */
   }
 }
 // eslint-disable-next-line max-params

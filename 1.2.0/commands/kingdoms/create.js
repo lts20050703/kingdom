@@ -33,14 +33,19 @@ module.exports = {
     })
     message.channel.send(`😇 Just need a second to create your kingdom. ID: ${kingdom_id}`)
     const color = Math.floor(Math.random() * colors.id.length)
-    const roles = []
-    roles.push(await message.guild.create({ data: { name: `${kingdom_id} ≼🔅Member≽`, color: colors.id[color] } }))
-    roles.push(await message.guild.create({ data: { name: `${kingdom_id} ≪💠Guard/king≫`, color: colors.id[color] } }))
-    roles.push(await message.guild.create({ data: { name: `${kingdom_id} ⋘🔶King⋙`, color: colors.id[color] } }))
-    const public_permission = [{ id: roles[1], allow: ['ATTACH_FILES', 'EMBED_LINKS'] }, { id: message.guild.roles.everyone, deny: ['MENTION_EVERYONE', 'ATTACH_FILES', 'EMBED_LINKS'] }]
-    const basic_permission = [{ id: roles[1], allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'MENTION_EVERYONE'] }, { id: roles[0], allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'] }, { id: message.guild.roles.everyone, deny: ['VIEW_CHANNEL', 'SEND_MESSAGES'] }]
-    const restricted_permission = [{ id: roles[1], allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'MENTION_EVERYONE'] }, { id: message.guild.roles.everyone, deny: ['VIEW_CHANNEL', 'SEND_MESSAGES'] }]
-    const locked_permission = [{ id: roles[1], allow: ['ADD_REACTIONS', 'VIEW_CHANNEL'] }, { id: roles[0], allow: ['ADD_REACTIONS', 'VIEW_CHANNEL'] }, { id: message.guild.roles.everyone, deny: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'ATTACH_FILES', 'EMBED_LINKS'] }]
+
+    const member = await message.guild.create({ data: { name: `${kingdom_id} ≼🔅Member≽`, color: colors.id[color] } })
+
+    const guard_king = await message.guild.create({ data: { name: `${kingdom_id} ≪💠Guard/king≫`, color: colors.id[color] } })
+
+    const public_permission = [{ id: guard_king, allow: ['ATTACH_FILES', 'EMBED_LINKS'] }, { id: message.guild.roles.everyone, deny: ['MENTION_EVERYONE', 'ATTACH_FILES', 'EMBED_LINKS'] }]
+
+    const basic_permission = [{ id: guard_king, allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'MENTION_EVERYONE'] }, { id: member, allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'] }, { id: message.guild.roles.everyone, deny: ['VIEW_CHANNEL', 'SEND_MESSAGES'] }]
+
+    const restricted_permission = [{ id: guard_king, allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'MENTION_EVERYONE'] }, { id: message.guild.roles.everyone, deny: ['VIEW_CHANNEL', 'SEND_MESSAGES'] }]
+
+    const locked_permission = [{ id: guard_king, allow: ['ADD_REACTIONS', 'VIEW_CHANNEL'] }, { id: member, allow: ['ADD_REACTIONS', 'VIEW_CHANNEL'] }, { id: message.guild.roles.everyone, deny: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'ATTACH_FILES', 'EMBED_LINKS'] }]
+
     let category = await autoProcessesChannelAdd([['category', colors.circle[color] + kingdom_name, false, 'Creating clan ' + kingdom_name, restricted_permission]], message.guild)
     category = category[0]
 
@@ -50,7 +55,7 @@ module.exports = {
       ['text', colors.square[color] + 'chat seargent', `Chat channel for clan ${kingdom_name}`, 'Creating clan ' + kingdom_name, restricted_permission, category.id],
       ['text', colors.heart[color] + 'border', `Border channel for clan ${kingdom_name}`, 'Creating clan ' + kingdom_name, public_permission, category.id]
     ], message.guild)
-    await message.member.roles.add(roles[2])
+    await message.member.roles.add(guard_king)
     await users.set(USER_ID + '.kingdom', kingdom_id)
     await users.set(USER_ID + '.role', 3)
     await general.push('kingdoms', kingdom_id)

@@ -1,8 +1,6 @@
 const { colors, gen_id } = require('../../libraries')
 
 module.exports = {
-  group: 'kingdoms',
-  name: 'create',
   description: 'Create your epic kingdom!',
   guild_only: true,
   async run (message, args, bot) {

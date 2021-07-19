@@ -1,33 +1,43 @@
+const ms = require('ms')
 const { MessageEmbed } = require('discord.js')
 
 module.exports = {
-  group: 'kingdoms',
-  name: 'action',
   aliases: ['act', 'actions'],
   description: 'Do an action!',
-  run (message, args, bot) {
-    const { author: { id: author_id } } = message
-    if (!args.length) return message.channel.send(new MessageEmbed().addField('Unlocked Actions:', 'repair|build|xp').setAuthor(message.author.username, message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 2048 })).setColor('6718ce'))
-    const lastUsed = (timedUsers[author_id] - Date.now() + KINGDOM_EPOCH) / 1000 || 0
-    if (lastUsed > 0) return message.channel.send(`Sorry, this command is on cooldown. Please try again in ${Math.floor((timedUsers[author_id] + KINGDOM_EPOCH - Date.now()) / 100) / 10}`)
+  cooldown: 30,
+  async run (message, args, bot) {
+    const { db: { cooldowns } } = bot
+    const { author: { id: user_id } } = message
+    if (!args.length) {
+      message.channel.send(new MessageEmbed().addField('Unlocked Actions:', 'repair|build|xp').setAuthor(message.author.username, message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 2048 })).setColor('6718ce'))
+      this.success = false
+      return
+    }
+    const lastUsed = await cooldowns.get(`${this.name}.${message.author.id}`) - Date.now()
     const in_clan = true
-    // resources and exp should be set according to real vars
+    // TODO resources and exp should be set according to real vars
     const exp = 13
     let count = 5
     let bonus = ''
-    if (lastUsed <= -900) {
+    console.log(`ms('-15m') ${ms('-15m')}`)
+    console.log(`ms('-1h') ${ms('-1h')}`)
+    console.log(`ms('-12h') ${ms('-12h')}`)
+    console.log(`ms('-1d') ${ms('-1d')}`)
+    await console.log(`timestamp ${await cooldowns.get(`${this.name}.${message.author.id}`)}`)
+    await console.log(`date now  ${Date.now()}`)
+    if (lastUsed <= ms('-15m')) {
       count = 10
       bonus = ' [15 mins+ bonus]'
     }
-    if (lastUsed <= -3600) {
+    if (lastUsed <= ms('-1h')) {
       count = 15
       bonus = ' [hourly x3]'
     }
-    if (lastUsed <= -3600 * 12) {
+    if (lastUsed <= ms('-12h')) {
       count = 20
       bonus = ' [12 hours+ bonus]'
     }
-    if (lastUsed <= -3600 * 24) {
+    if (lastUsed <= ms('-1d')) {
       count = Math.floor(25 * (1 + lastUsed / (-3600 * 24)) ** 0.5)
       bonus = ' [long offline inactivity]'
     }
@@ -46,16 +56,24 @@ module.exports = {
         r = acting('repair', count, exp, in_clan)
         break
     }
-    if (r[0]) timedUsers[author_id] = Date.now() - KINGDOM_EPOCH + 30000
+    if (r[0]) timedUsers[user_id] = Date.now() - KINGDOM_EPOCH + 30000
     if (!r[0] && !r[1] && !r[2]) return message.channel.send(new MessageEmbed().setTitle('Invalid Action').setAuthor(message.author.username, message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 2048 })).setColor('6718ce'))
 
     message.channel.send(new MessageEmbed().setTitle(r[1]).addFields(r[2]).setAuthor(message.author.tag, message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 2048 })).setColor('6718ce').setDescription(`Multiplier: x${count / 5}${bonus}`))
+    this.success = true
   }
 }
 
 const KINGDOM_EPOCH = 1624385650000
 const timedUsers = {}
-
+/**
+ * Helper Act Function
+ * @param {string} actType type of act, xp | build | repair
+ * @param {number} count idk what this parameter mean ask chriscj
+ * @param {number} exp Experience
+ * @param {boolean} IN_CLAN in clan?
+ * @returns [worked?, title, fields]
+ */
 function acting (actType, count, exp, IN_CLAN) {
   // Return:  [worked?, `title`, fields
   const knownLevel = 1
@@ -65,7 +83,7 @@ function acting (actType, count, exp, IN_CLAN) {
     case 'xp':
     case 'exp':
     case 'experience':
-    // TOADD:  push +count xp in the user database
+    // TODO:  push +count xp in the user database
       if (!IN_CLAN) r = [true, 'SOLO GAIN EXP', [{ name: 'You got ', value: `${count} xp!\n` + showLevel(alreadyxp + count, knownLevel) }]]
       else {
         r = [true, 'GAIN EXP', [{ name: 'You got ', value: `${count} xp! Your guild got ${count * 3} xp!\n` + showLevel(alreadyxp + count, knownLevel, false) }]]

@@ -1,9 +1,5 @@
 module.exports = {
-  description: 'Reloads a command',
-  owner_only: true,
-  run (message, args, bot) {
-    this.success = false
-
+  run (bot, message, args) {
     if (!args.length) return message.channel.send('No argument provided')
     if (args[0] === 'event') return message.channel.send('~~`kd reload event`~~ `kd reloadevent`')
     const command_name = args[0].toLowerCase()
@@ -21,7 +17,5 @@ module.exports = {
     bot.commands.set(new_command.name, new_command)
 
     message.channel.send(`Command \`${new_command.name}\` was reloaded!`)
-
-    this.success = true
   }
 }

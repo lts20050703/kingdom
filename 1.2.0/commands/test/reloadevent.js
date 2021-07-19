@@ -1,11 +1,7 @@
 const { readdirSync } = require('fs')
 
 module.exports = {
-  description: 'Reloads a event',
-  owner_only: true,
-  run (message, args, bot) {
-    this.success = false
-
+  run (bot, message, args) {
     if (!args.length) return message.channel.send('No argument provided')
     const event_name = args[0]
     const events = readdirSync('./events')
@@ -15,7 +11,5 @@ module.exports = {
     bot.removeAllListeners(event_name)
     bot.on(event_name, message => new_event.run(message, bot))
     message.channel.send(`Event ${event_name} was reloaded!`)
-
-    this.success = true
   }
 }

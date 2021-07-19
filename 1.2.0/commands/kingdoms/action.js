@@ -4,13 +4,12 @@ const { MessageEmbed } = require('discord.js')
 module.exports = {
   aliases: ['act', 'actions'],
   description: 'Do an action!',
-  cooldown: 30,
-  async run (message, args, bot) {
-    const { db: { cooldowns } } = bot
-    const { author: { id: user_id } } = message
+  async run (bot, message, args) {
+    const { cooldowns } = bot.db
+    const { id: user_id } = message.author
     if (!args.length) {
       message.channel.send(new MessageEmbed().addField('Unlocked Actions:', 'repair|build|xp').setAuthor(message.author.username, message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 2048 })).setColor('6718ce'))
-      this.success = false
+
       return
     }
     const lastUsed = await cooldowns.get(`${this.name}.${message.author.id}`) - Date.now()
@@ -60,7 +59,6 @@ module.exports = {
     if (!r[0] && !r[1] && !r[2]) return message.channel.send(new MessageEmbed().setTitle('Invalid Action').setAuthor(message.author.username, message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 2048 })).setColor('6718ce'))
 
     message.channel.send(new MessageEmbed().setTitle(r[1]).addFields(r[2]).setAuthor(message.author.tag, message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 2048 })).setColor('6718ce').setDescription(`Multiplier: x${count / 5}${bonus}`))
-    this.success = true
   }
 }
 

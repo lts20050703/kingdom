@@ -1,11 +1,7 @@
 const { readdirSync } = require('fs')
 
 module.exports = {
-  description: 'Loads a command',
-  owner_only: true,
-  run (message, args, bot) {
-    this.success = true
-
+  run (bot, message, args) {
     if (!args.length) return message.channel.send('No argument provided')
     const command_name = args[0].toLowerCase()
 

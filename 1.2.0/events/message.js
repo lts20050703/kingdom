@@ -16,6 +16,6 @@ module.exports = {
 
     if (!command) return
 
-    command.run(message, bot, args)
+    command.run(bot, message, args)
   }
 }

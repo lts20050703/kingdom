@@ -2,8 +2,7 @@ const { colors, gen_id } = require('../../libraries')
 
 module.exports = {
   description: 'Create your epic kingdom!',
-  guild_only: true,
-  async run (message, args, bot) {
+  async run (bot, message, args) {
     message.channel.send('Under migration')
     const { db: { users, kingdoms, general } } = bot
     const { author: { id: user_id } } = message

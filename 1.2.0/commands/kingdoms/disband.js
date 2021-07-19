@@ -5,8 +5,7 @@ const { MessageButton } = require('discord-buttons')
 module.exports = {
   aliases: ['delete', 'del'],
   description: 'Disband your kingdom and delete it forever',
-  run (message, args) {
-    this.success = true
+  run (bot, message, args) {
     const { client: { db: { users, kingdoms } }, author: { id: user_id } } = message
     users.get(`${user_id}.kingdom`).then(async kingdom => {
       if (!kingdom) return message.channel.send(':hand_splayed: You\'re not on a Kingdom. Join or create one!')

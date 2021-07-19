@@ -3,9 +3,7 @@ const { prefixes } = require('../../config.json')
 module.exports = {
   aliases: ['commands'],
   description: 'List all of my commands or info about a specific command.',
-  run (message, args, bot) {
-    this.success = false
-
+  run (bot, message, args) {
     const data = []
     const { commands } = bot
 
@@ -15,7 +13,7 @@ module.exports = {
       data.push(`\nYou can send \`${prefixes[0]}help [command name]\` to get info on a specific command!`)
 
       message.channel.send(data, { split: true })
-      this.success = true
+
       return
     }
     const name = args[0].toLowerCase()
@@ -33,6 +31,5 @@ module.exports = {
     data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`)
 
     message.channel.send(data, { split: true })
-    this.success = true
   }
 }

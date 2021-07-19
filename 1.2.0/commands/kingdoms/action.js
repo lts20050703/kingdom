@@ -2,7 +2,7 @@ const ms = require('ms')
 const { MessageEmbed } = require('discord.js')
 
 module.exports = {
-  aliases: ['act', 'actions'],
+  aliases: ['act'],
   description: 'Do an action!',
   async run (bot, message, args) {
     const { cooldowns } = bot.db

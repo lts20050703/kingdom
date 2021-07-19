@@ -1,9 +1,9 @@
-const { colors, gen_id } = require('../../libraries')
+const { colors } = require('../../lib')
 
 module.exports = {
   description: 'Create your epic kingdom!',
+  args: 1,
   async run (bot, message, args) {
-    message.channel.send('Under migration')
     const { db: { users, kingdoms, general } } = bot
     const { author: { id: user_id } } = message
     let reply
@@ -14,7 +14,6 @@ module.exports = {
     })
     if (reply) return message.channel.send(reply)
 
-    const kingdom_id = gen_id(10)
     const kingdom_name = args.join('-')
     await general.get('kingdoms').then(all_kingdoms => {
       if (all_kingdoms) {
@@ -36,6 +35,10 @@ module.exports = {
     if (kingdom_name.length > 20) {
       return message.channel.send('Wait. That\'s too long! Wayy too long. Please take a shorter name, 20+ characters is wayyyy too much trust me.')
     }
+
+    let kingdom_id = ''
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    for (let i = 0; i < 10; i++) kingdom_id += characters[Math.floor(Math.random() * characters.length)]
 
     message.channel.send(`😇 Just need a second to create your kingdom. ID: ${kingdom_id}`)
     const color = Math.floor(Math.random() * colors.id.length)

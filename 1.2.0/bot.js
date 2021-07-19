@@ -1,5 +1,5 @@
 const { readdirSync } = require('fs')
-const { log } = require('./libraries')
+const { log } = require('./lib')
 
 // Discord Bot
 const { Client, Collection } = require('discord.js')
@@ -24,11 +24,8 @@ for (const folder of folders) {
     const command = require(`./commands/${folder}/${file}`)
     if (!command.group) command.group = folder
     if (!command.name) command.name = file.replace('.js', '')
-    if (!command.run) {
-      log(1, `[${file}] run () {} missing! The ${file.slice(0, -3)} command will NOT be handled`)
-      continue
-    }
-    bot.commands.set(command.name, command)
+    if (command.run) bot.commands.set(command.name, command)
+    else log(1, `[${file}] run () {} missing! The ${file.slice(0, -3)} command will NOT be handled`)
   }
 }
 
@@ -49,3 +46,6 @@ bot.db.general = bot.db.createModel('general')
 bot.db.kingdoms = bot.db.createModel('kingdoms')
 bot.db.sessions = bot.db.createModel('sessions')
 bot.db.cooldowns = bot.db.createModel('cooldowns')
+
+// Cooldowns
+bot.cooldowns = new Collection()

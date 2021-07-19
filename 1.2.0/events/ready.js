@@ -1,4 +1,4 @@
-const { log } = require('../libraries')
+const { log } = require('../lib')
 const { prefixes } = require('../config.json')
 
 module.exports = {

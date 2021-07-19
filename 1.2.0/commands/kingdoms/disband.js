@@ -1,9 +1,8 @@
 const { prefix } = require('../../config.json')
-const { colors } = require('../../libraries')
+const { colors } = require('../../lib')
 const { MessageButton } = require('discord-buttons')
 
 module.exports = {
-  aliases: ['delete', 'del'],
   description: 'Disband your kingdom and delete it forever',
   run (bot, message, args) {
     const { client: { db: { users, kingdoms } }, author: { id: user_id } } = message

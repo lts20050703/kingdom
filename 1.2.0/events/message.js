@@ -9,7 +9,7 @@ module.exports = {
 
     // Checking Prefix
     let prefix
-    for (const _prefix of prefixes) if (message.content.startsWith(_prefix)) prefix = _prefix
+    for (const _prefix of prefixes) if (message.content.toLowerCase().startsWith(_prefix)) prefix = _prefix
     if (!prefix) return
 
     const args = message.content.slice(prefix.length).trim().split(/ +/)

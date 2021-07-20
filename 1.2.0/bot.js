@@ -38,7 +38,7 @@ const { Database } = require('quickmongo')
 bot.db = new Database(process.env.db)
 
 // Database Events Handler
-bot.db.on('ready', () => log(2, `✅ [Database] Connected to ${/372005/.test(process.env.db) ? '372005' : 'Kingdoms'} Database!`))
+bot.db.on('ready', () => log(2, `[Database]: Connected to ${/372005/.test(process.env.db) ? '372005' : 'Kingdoms'} Database!`))
 
 // Database Models
 bot.db.users = bot.db.createModel('users')

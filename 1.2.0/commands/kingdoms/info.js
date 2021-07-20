@@ -1,31 +1,49 @@
-// const { Command } = require('discord.js-commando')
-// const libraries = require('../../libraries.js')
-// const { colors } = require('../../libraries')
+const ms = require('ms')
+const { MessageEmbed } = require('discord.js')
+const { log, colors } = require('../../lib')
 
-// module.exports = class invite extends Command {
-//   constructor (client) {
-//     super(client, {
-//       name: 'info',
-//       group: 'kingdoms',
-//       memberName: 'info',
-//       description: 'Get info about a kingdom or a user.',
-//       args: [{
-//         key: 'thing',
-//         prompt: 'Tag a user (or enter his ID) / or a kingdom name!',
-//         type: 'string',
-//         default: ''
-//       }]
-//     })
-//   }
+module.exports = {
+  description: 'Get info about a kingdom or a user.',
+  async run (bot, message, args) {
+    const { users, kingdoms, general } = bot.db
+    const embed = new MessageEmbed()
+    // Checking for kingdoms
+    const kingdoms_id = await general.get('kingdoms')
+    let kingdom_id
+    for (const _kingdom_id of kingdoms_id) {
+      const kingdom_name = await kingdoms.get(`${_kingdom_id}.name`)
+      if (kingdom_name.toLowerCase() === args.join('-').toLowerCase()) kingdom_id = _kingdom_id
+    }
+    if (kingdom_id) {
+      log(3, '[Info.js] Found kingdom')
+      const kingdom = await kingdoms.get(kingdom_id)
+      let all_members = 'Total members: ' + kingdom.members.length + '\n'
+      for (const member of kingdom.members) {
+        const member_role = await users.get(member + '.role')
+        let role_name
+        if (member_role === 3) role_name = 'King'
+        if (member_role === 2) role_name = 'Royal Guard'
+        if (member_role === 1) role_name = 'Member'
+        all_members = all_members + '<@' + member + '> (' + role_name + ') \n'
+      }
+      const kingdom_creation_date = kingdom.creationDate ? `${ms(Date.now() - kingdom.creationDate)} ago` : 'Unavailable'
+      embed
+        .setTimestamp()
+        .setColor('#ebe134')
+        .setTitle('Info about kingdom')
+        .addField('Kingdom name:', `${colors.circle[kingdom.color]} ${kingdom.name}`, true)
+        .addField('Kingdom owner:', `<@${kingdom.owner}>`, true)
+        .addField('Kingdom members:', all_members, true)
+        .addField('\u200b', '\u200b')
+        .addField('Kingdom creation date:', kingdom_creation_date, true)
+        .addField('Kingdom stats:', '**Level:** soon™ \n**XP:** soon™', true)
+        .setFooter(`Requested by ${message.author.tag} | © Kingdoms 2020 - 2021`, message.author.displayAvatarURL({ dynamic: true }))
+      return message.channel.send(embed)
+    }
+    message.channel.send('Under upgrading to version 1.1.4.2')
+  }
+}
 
-//   async run (message, { thing }) {
-//     const { db } = message.client
-//     const users = db.createModel('users')
-//     const kingdoms = db.createModel('kingdoms')
-//     const general = db.createModel('general')
-//     // Test if thing is a member
-//     thing = thing.toLowerCase().replace('<@', '').replace('>', '').replace('!', '')
-//     const guild = message.client.guilds.cache.get(message.guild.id)
 //     if (guild.member(thing) || libraries.getMember(thing, message.guild, false, this.client)) {
 //       if (!guild.member(thing)) thing = libraries.getMember(thing, message.guild, false, this.client).id
 //       thing = thing.toLowerCase().replace('<@', '').replace('>', '').replace('!', '')

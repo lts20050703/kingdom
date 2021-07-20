@@ -61,7 +61,10 @@ module.exports = {
         break
     }
     if (r[0]) timedUsers[user_id] = Date.now() - KINGDOM_EPOCH + 30000
-    if (!r[0] && !r[1] && !r[2]) return message.channel.send(new MessageEmbed().setTitle('Invalid Action').setAuthor(message.author.username, message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 2048 })).setColor('6718ce'))
+    if (!r[0] && !r[1] && !r[2]) {
+      cancel_cooldown(bot, message.author.id, this.name)
+      return message.channel.send(new MessageEmbed().setTitle('Invalid Action').setAuthor(message.author.username, message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 2048 })).setColor('6718ce'))
+    }
 
     message.channel.send(new MessageEmbed().setTitle(r[1]).addFields(r[2]).setAuthor(message.author.tag, message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 2048 })).setColor('6718ce').setDescription(`Multiplier: x${count / 5}${bonus}`))
   }

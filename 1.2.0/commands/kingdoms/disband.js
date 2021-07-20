@@ -1,19 +1,24 @@
 const { prefix } = require('../../config.json')
-const { colors } = require('../../lib')
+const { colors, cancel_cooldown } = require('../../lib')
 const { MessageButton } = require('discord-buttons')
 
 module.exports = {
   description: 'Disband your kingdom and delete it forever',
+  cooldown: '1h',
   run (bot, message, args) {
     const { client: { db: { users, kingdoms } }, author: { id: user_id } } = message
     users.get(`${user_id}.kingdom`).then(async kingdom => {
-      if (!kingdom) return message.channel.send(':hand_splayed: You\'re not on a Kingdom. Join or create one!')
+      if (!kingdom) {
+        cancel_cooldown(bot, message.author.id, this.name)
+        return message.channel.send(':hand_splayed: You\'re not on a Kingdom. Join or create one!')
+      }
       const role = await users.get(`${user_id}.role`)
       const owner = await kingdoms.get(`${await users.get(`${user_id}.kingdom`)}.owner`)
       const kingdom_id = await users.get(`${user_id}.kingdom`)
       const kingdom_color = await kingdoms.get(`${kingdom_id}.color`)
       const kingdom_name = await kingdoms.get(`${kingdom_id}.name`)
       if (role !== 3 || owner !== message.author.id) {
+        cancel_cooldown(bot, message.author.id, this.name)
         return message.say(':police_officer: Hold up! You aren\'t the owner of this Kingdom. Only **' + this.client.users.cache.find(user => user.id === owner).tag + `** can disband this Kingdom. If you wish however, you can leave this kingdom by typing \`${prefix} leave\`.`)
       }
       message.channel.send(`:question: Are you sure you want to disband and DELETE your kingdom, ${colors.circle[kingdom_color]} **${kingdom_name}**? This action cannot be UNDONE!! All the Kingdom CHANNELS, STATS, ETC will be PERMANENTLY DELETED!!!! Type \`I understand that this action cannot be undone [kingdom name]\` (case sensitive) to confirm the deletion of your kingdom.`).then(() => {
@@ -40,10 +45,12 @@ module.exports = {
                 }, 30000)
               })
             } else {
+              cancel_cooldown(bot, message.author.id, this.name)
               return message.channel.send(':partying_face: Deletion cancelled. You did not respond with the right message.')
             }
           })
           .catch(() => {
+            cancel_cooldown(bot, message.author.id, this.name)
             message.channel.send(':clock1: Timeout! You did not respond in time.')
           })
       })

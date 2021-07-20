@@ -2,6 +2,7 @@ const { colors } = require('../../lib')
 
 module.exports = {
   description: 'Create your epic kingdom!',
+  cooldown: '1h',
   args: 1,
   async run (bot, message, args) {
     const { db: { users, kingdoms, general } } = bot

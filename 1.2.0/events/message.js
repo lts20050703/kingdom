@@ -39,14 +39,12 @@ module.exports = {
       default: cooldown_amount = ms('3s')
     }
 
-    if (timestamps.has(message.author.id) || bot.db.cooldowns.has(`${command.name}.${message.author.id}`)) {
-      const expiration_time = (timestamps.get(message.author.id) || bot.db.cooldowns.get(`${command.name}.${message.author.id}`)) + cooldown_amount
-
-      const time_left = expiration_time - now
-      if (time_left > ms('1s')) {
-        message.channel.send(`Please wait ${ms(time_left, { long: true })} more second(s) before reusing the ${command.name} command.`)
-        return true
-      }
+    if (timestamps.has(message.author.id) || await bot.db.cooldowns.has(`${command.name}.${message.author.id}`)) {
+      const time = timestamps.get(message.author.id) || await bot.db.cooldowns.get(`${command.name}.${message.author.id}`)
+      const diff = now - time
+      if (diff < ms('1s')) return message.channel.send(`Please wait at least one second before reusing the ${command.name} command`)
+      const time_left = time + cooldown_amount - now
+      if (time_left > ms('1s')) return message.channel.send(`Please wait ${ms(time_left, { long: true })} before reusing the ${command.name} command.`)
     }
 
     timestamps.set(message.author.id, now)

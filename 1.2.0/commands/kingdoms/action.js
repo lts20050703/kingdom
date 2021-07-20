@@ -1,43 +1,48 @@
 const ms = require('ms')
-const { MessageEmbed } = require('discord.js')
-
+const { MessageEmbed, Collection } = require('discord.js')
+const { cancel_cooldown } = require('../../lib')
 module.exports = {
   aliases: ['act'],
   description: 'Do an action!',
+  cooldown: '30s',
   async run (bot, message, args) {
-    const { cooldowns } = bot.db
     const { id: user_id } = message.author
     if (!args.length) {
+      cancel_cooldown(bot, message.author.id, this.name)
       message.channel.send(new MessageEmbed().addField('Unlocked Actions:', 'repair|build|xp').setAuthor(message.author.username, message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 2048 })).setColor('6718ce'))
-
       return
     }
-    const lastUsed = await cooldowns.get(`${this.name}.${message.author.id}`) - Date.now()
+
+    // checking cooldown
+    if (!bot.cooldowns2.has(this.name)) bot.cooldowns2.set(this.name, new Collection())
+
+    const now = Date.now()
+    const timestamps = bot.cooldowns2.get(this.name)
+
+    const last_used = timestamps.get(message.author.id) || bot.db.cooldowns2.get(`${this.name}.${message.author.id}`) - Date.now()
+
+    timestamps.set(message.author.id, now)
+    bot.db.cooldowns2.set(`${this.name}.${message.author.id}`, now)
+
     const in_clan = true
     // TODO resources and exp should be set according to real vars
     const exp = 13
     let count = 5
     let bonus = ''
-    console.log(`ms('-15m') ${ms('-15m')}`)
-    console.log(`ms('-1h') ${ms('-1h')}`)
-    console.log(`ms('-12h') ${ms('-12h')}`)
-    console.log(`ms('-1d') ${ms('-1d')}`)
-    await console.log(`timestamp ${await cooldowns.get(`${this.name}.${message.author.id}`)}`)
-    await console.log(`date now  ${Date.now()}`)
-    if (lastUsed <= ms('-15m')) {
+    if (last_used <= ms('-15m')) {
       count = 10
       bonus = ' [15 mins+ bonus]'
     }
-    if (lastUsed <= ms('-1h')) {
+    if (last_used <= ms('-1h')) {
       count = 15
       bonus = ' [hourly x3]'
     }
-    if (lastUsed <= ms('-12h')) {
+    if (last_used <= ms('-12h')) {
       count = 20
       bonus = ' [12 hours+ bonus]'
     }
-    if (lastUsed <= ms('-1d')) {
-      count = Math.floor(25 * (1 + lastUsed / (-3600 * 24)) ** 0.5)
+    if (last_used <= ms('-1d')) {
+      count = Math.floor(25 * (1 + last_used / (-3600 * 24)) ** 0.5)
       bonus = ' [long offline inactivity]'
     }
     let r = [false, false, false]

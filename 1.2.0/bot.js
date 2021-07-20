@@ -46,6 +46,8 @@ bot.db.general = bot.db.createModel('general')
 bot.db.kingdoms = bot.db.createModel('kingdoms')
 bot.db.sessions = bot.db.createModel('sessions')
 bot.db.cooldowns = bot.db.createModel('cooldowns')
+bot.db.cooldowns2 = bot.db.createModel('cooldowns2')
 
 // Cooldowns
 bot.cooldowns = new Collection()
+bot.cooldowns2 = new Collection()

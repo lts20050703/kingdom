@@ -1,5 +1,5 @@
 const { readdirSync } = require('fs')
-const { log } = require('./lib')
+const { log } = require('./config')
 
 // Discord Bot
 const { Client, Collection } = require('discord.js')

@@ -1,6 +1,6 @@
 const ms = require('ms')
 const { MessageEmbed } = require('discord.js')
-const { log, colors } = require('../../lib')
+const { colors, log } = require('../../config')
 
 module.exports = {
   description: 'Get info about a kingdom or a user.',
@@ -88,5 +88,6 @@ module.exports = {
         .addField('Kingdom stats:', '**Level:** soon™ \n**XP:** soon™', true)
       return message.channel.send(embed)
     }
+    return message.channel.send('Invalid mention/user_id/displayName.startsWith/kingdom_name')
   }
 }

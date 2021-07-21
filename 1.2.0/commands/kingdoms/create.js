@@ -1,4 +1,4 @@
-const { colors } = require('../../lib')
+const { colors } = require('../../config')
 
 module.exports = {
   description: 'Create your epic kingdom!',

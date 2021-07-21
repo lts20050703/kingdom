@@ -1,6 +1,8 @@
 const chalk = require('chalk')
 
 module.exports = {
+  prefixes: ['kd'],
+  owners: ['379643682984296448', '401450759981629450', '472327239661518848'],
   colors: {
     id: ['NOT_QUITE_BLACK', 'BLUE', 'BROWN', 'GREEN', 'ORANGE', 'PURPLE', 'RED', 'WHITE', 'YELLOW'],
     square: ['⬛', '🟦', '🟫', '🟩', '🟧', '🟪', '🟥', '⬜', '🟨'],

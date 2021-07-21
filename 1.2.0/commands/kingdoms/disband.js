@@ -1,5 +1,4 @@
-const { prefix } = require('../../config.json')
-const { colors, cancel_cooldown } = require('../../lib')
+const { prefixes, colors, cancel_cooldown } = require('../../config')
 const { MessageButton } = require('discord-buttons')
 
 module.exports = {
@@ -19,7 +18,7 @@ module.exports = {
       const kingdom_name = await kingdoms.get(`${kingdom_id}.name`)
       if (role !== 3 || owner !== message.author.id) {
         cancel_cooldown(bot, message.author.id, this.name)
-        return message.say(':police_officer: Hold up! You aren\'t the owner of this Kingdom. Only **' + this.client.users.cache.find(user => user.id === owner).tag + `** can disband this Kingdom. If you wish however, you can leave this kingdom by typing \`${prefix} leave\`.`)
+        return message.say(':police_officer: Hold up! You aren\'t the owner of this Kingdom. Only **' + this.client.users.cache.find(user => user.id === owner).tag + `** can disband this Kingdom. If you wish however, you can leave this kingdom by typing \`${prefixes[0]} leave\`.`)
       }
       message.channel.send(`:question: Are you sure you want to disband and DELETE your kingdom, ${colors.circle[kingdom_color]} **${kingdom_name}**? This action cannot be UNDONE!! All the Kingdom CHANNELS, STATS, ETC will be PERMANENTLY DELETED!!!! Type \`I understand that this action cannot be undone [kingdom name]\` (case sensitive) to confirm the deletion of your kingdom.`).then(() => {
         const filter = m => message.author.id === m.author.id

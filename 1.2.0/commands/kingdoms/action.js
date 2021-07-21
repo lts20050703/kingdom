@@ -1,6 +1,6 @@
 const ms = require('ms')
 const { MessageEmbed, Collection } = require('discord.js')
-const { cancel_cooldown } = require('../../lib')
+const { cancel_cooldown } = require('../../config')
 module.exports = {
   aliases: ['act'],
   description: 'Do an action!',

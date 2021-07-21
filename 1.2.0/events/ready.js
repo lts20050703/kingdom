@@ -1,5 +1,4 @@
-const { log } = require('../lib')
-const { prefixes } = require('../config.json')
+const { log, prefixes } = require('../config')
 
 module.exports = {
   run (bot) {

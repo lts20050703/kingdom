@@ -5,30 +5,34 @@ const { colors, log } = require('../../config')
 module.exports = {
   description: 'Get info about a kingdom or a user.',
   async run (bot, message, args) {
-    message.channel.send('Version 1.1.4.3/Release_Candidate_2 - If you found any bug please @theo372005#2195')
+    message.channel.send('Version 1.1.4.6 - Order: `No args -> Mention / User ID -> Nickname Starts With -> Username starts with -> Kingdom Name`')
     const { users, kingdoms, general } = bot.db
     const embed = new MessageEmbed()
       .setTimestamp()
       .setColor('#ebe134')
-      .setFooter(`Requested by ${message.author.tag} | © Kingdoms 2020`, message.author.displayAvatarURL({ dynamic: true }))
-    // Checking for no args or user ID or username
-    if (!args.length || message.guild.member(args[0].replace('<@', '').replace('!', '').replace('>', '')) || message.guild.members.cache.filter(member => member.displayName.toLowerCase().startsWith(args.join(' ').toLowerCase())).size === 1) {
-      if (!args.length) args[0] = message.author.id
-      else if (message.guild.member(args[0].replace('<@', '').replace('!', '').replace('>', ''))) args[0] = message.guild.member(args[0].replace('<@', '').replace('!', '').replace('>', '')).id
-      else if (message.guild.members.cache.filter(member => member.displayName.toLowerCase().startsWith(args.join(' ').toLowerCase())).size === 1) args[0] = message.guild.members.cache.filter(member => member.displayName.toLowerCase().startsWith(args.join(' ').toLowerCase())).first().id
-      log(3, '[Info.js] No args / User ID / Username')
+      .setFooter(`Requested by ${message.author.tag} | Kingdoms™️`, message.author.displayAvatarURL({ dynamic: true }))
+
+    let user_id
+    if (!args.length) user_id = message.author.id
+    else {
+      for (const character of '<@!>') args[0] = args[0].replace(character, '')
+      args = args.join(' ').toLowerCase().split(' ')
+      if (message.guild.member(args[0])) user_id = args[0]
+      else if (message.guild.members.cache.filter(member => member.displayName.toLowerCase().startsWith(args.join(' '))).size === 1) user_id = message.guild.members.cache.find(member => member.displayName.toLowerCase().startsWith(args[0])).id
+      else if (message.guild.members.cache.filter(member => member.user.tag.toLowerCase().startsWith(args.join(' '))).size === 1) user_id = message.guild.members.cache.find(member => member.user.name.toLowerCase().startsWith(args[0])).id
+    }
+
+    if (user_id) {
+      log(3, '[info.js] User ID 302 Found')
       const user_joined = `${ms(Date.now() - message.member.joinedTimestamp)} ago`
       embed
         .setTitle('Info about user')
-        .setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-        .addField('User', `<@${args[0]}> (ID: ${args[0]})`, true)
+        .setThumbnail(message.guild.member(user_id).user.displayAvatarURL({ dynamic: true }))
+        .addField('User', `<@${user_id}> (ID: ${user_id})`, true)
         .addField('User joined', user_joined, true)
-      if (!await users.has(`${args[0]}.kingdom`)) {
-        log(3, '[Info.js] Kingdom: false')
-        return message.channel.send(embed)
-      }
-      log(3, '[Info.js] Kingdom: true')
-      const user = await users.get(args[0])
+      if (!await users.has(`${user_id}.kingdom`)) return message.channel.send(embed)
+      log(4, '[Info.js] Kingdom 302 Found')
+      const user = await users.get(user_id)
       const kingdom = await kingdoms.get(user.kingdom)
 
       let role
@@ -56,6 +60,7 @@ module.exports = {
         .addField('Kingdom stats', '**Level:** soon™ \n**XP:** soon™', true)
       return message.channel.send({ embed })
     }
+
     // Checking for Kingdom Names
     const kingdom_ids = await general.get('kingdoms')
     let kingdom_id
@@ -86,6 +91,11 @@ module.exports = {
         .addField('Kingdom stats:', '**Level:** soon™ \n**XP:** soon™', true)
       return message.channel.send(embed)
     }
-    return message.channel.send('Invalid mention/user_id/displayName.startsWith/kingdom_name')
+
+    if (message.guild.members.cache.filter(member => member.displayName.toLowerCase().startsWith(args.join(' '))).size > 1) return message.channel.send(`Multiple nicknames found (${message.guild.members.cache.filter(member => member.displayName.toLowerCase().startsWith(args.join(' '))).map(member => member.displayName).join(', ')})`)
+
+    if (message.guild.members.cache.filter(member => member.user.tag.toLowerCase().startsWith(args.join(' '))).size > 1) return message.channel.send(`Multiple nicknames found (${message.guild.members.cache.filter(member => member.user.tag.toLowerCase().startsWith(args.join(' '))).map(member => member.user.tag).join(', ')})`)
+
+    message.channel.send('Invalid Mention / User ID / Nickname / Username')
   }
 }

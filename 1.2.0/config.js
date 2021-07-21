@@ -11,15 +11,14 @@ module.exports = {
     book: ['📓', '📘', '📔', '📗', '📙', '📖', '📕', '🔖', '📒']
   },
   /**
-   * @param {*} level 0 Error 1 Warn 2 Info 3 Debug
+   * @param {*} level 0: Error | 1: Warn | 2: Info
    * @param {*} message
    */
   log (level, message) {
     switch (level) {
-      case 0: console.log(`${chalk.bold.rgb(255, 0, 0)('[Error]:')} ${chalk.rgb(255, 0, 0)(message)}`); break
-      case 1: console.log(`${chalk.bold.rgb(255, 255, 0)('[Warn]:')} ${chalk.rgb(255, 255, 0)(message)}`); break
-      case 2: console.log(`${chalk.bold.rgb(0, 255, 0)('[Info]:')} ${chalk.rgb(0, 255, 0)(message)}`); break
-      case 3: console.log(`${chalk.bold.rgb(0, 255, 255)('[Debug]:')} ${chalk.rgb(0, 255, 255)(message)}`); break
+      case 0: console.log(`${chalk.bold.hex('#FF0000')('[Error]:')} ${message}`); break
+      case 1: console.log(`${chalk.bold.hex('#FFFF00')('[Warn]: ')} ${message}`); break
+      case 2: console.log(`${chalk.bold.hex('#00FF00')('[Info]: ')} ${message}`); break
     }
   },
   /**

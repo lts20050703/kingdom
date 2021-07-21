@@ -12,8 +12,10 @@ module.exports = {
       .setColor('#ebe134')
       .setFooter(`Requested by ${message.author.tag} | © Kingdoms 2020`, message.author.displayAvatarURL({ dynamic: true }))
     // Checking for no args or user ID or username
-    if (!args.length || message.guild.member(args[0].replace('<@', '').replace('!', '').replace('>', '')) || message.guild.members.filter(member => member.displayName.toLowerCase().startsWith(args.join(' ').toLowerCase())).size === 1) {
-      if (!args.length) args[0] = message.guild.member(args[0].replace('<@', '').replace('!', '').replace('>', '')) ? message.guild.member(args[0].replace('<@', '').replace('!', '').replace('>', '')) : message.guild.members.filter(member => member.displayName.toLowerCase().startsWith(args.join(' ').toLowerCase()))[0]
+    if (!args.length || message.guild.member(args[0].replace('<@', '').replace('!', '').replace('>', '')) || message.guild.members.cache.filter(member => member.displayName.toLowerCase().startsWith(args.join(' ').toLowerCase())).size === 1) {
+      if (!args.length) args[0] = message.author.id
+      else if (message.guild.member(args[0].replace('<@', '').replace('!', '').replace('>', ''))) args[0] = message.guild.member(args[0].replace('<@', '').replace('!', '').replace('>', '')).id
+      else if (message.guild.members.cache.filter(member => member.displayName.toLowerCase().startsWith(args.join(' ').toLowerCase())).size === 1) args[0] = message.guild.members.cache.filter(member => member.displayName.toLowerCase().startsWith(args.join(' ').toLowerCase())).first().id
       log(3, '[Info.js] No args / User ID / Username')
       const user_joined = `${ms(Date.now() - message.member.joinedTimestamp)} ago`
       embed

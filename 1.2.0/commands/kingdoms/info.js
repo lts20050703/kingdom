@@ -5,7 +5,7 @@ const { colors, log } = require('../../config')
 module.exports = {
   description: 'Get info about a kingdom or a user.',
   async run (bot, message, args) {
-    message.channel.send('Version 1.1.4.2 - If you found any bug please @theo372005#2195')
+    message.channel.send('Version 1.1.4.3/Release_Candidate_2 - If you found any bug please @theo372005#2195')
     const { users, kingdoms, general } = bot.db
     const embed = new MessageEmbed()
       .setTimestamp()
@@ -25,7 +25,6 @@ module.exports = {
         .addField('User joined', user_joined, true)
       if (!await users.has(`${args[0]}.kingdom`)) {
         log(3, '[Info.js] Kingdom: false')
-        embed.addField('Is on a kingdom?', 'no', true)
         return message.channel.send(embed)
       }
       log(3, '[Info.js] Kingdom: true')
@@ -47,7 +46,6 @@ module.exports = {
       if (user.role === 1) role = 'Member'
       const kingdom_created = kingdom.creationDate ? `${ms(Date.now() - kingdom.creationDate)} ago` : 'Unavailable'
       embed
-        .addField('Is on a kingdom?', 'yes', true)
         .addField('\u200b', '\u200b')
         .addField('Kingdom name', `${colors.circle[kingdom.color]} ${kingdom.name}`, true)
         .addField('Role in kingdom:', role, true)

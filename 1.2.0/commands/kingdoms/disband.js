@@ -2,9 +2,7 @@ const { prefixes, colors, cancel_cooldown } = require('../../lib')
 const { MessageButton } = require('discord-buttons')
 
 module.exports = {
-  description: 'Disband your kingdom and delete it forever',
-  cooldown: '1h',
-  run (bot, message, args) {
+  async run (bot, message, args) {
     const { client: { db: { users, kingdoms } }, author: { id: user_id } } = message
     users.get(`${user_id}.kingdom`).then(async kingdom => {
       if (!kingdom) {

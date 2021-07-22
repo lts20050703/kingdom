@@ -3,7 +3,6 @@ const { MessageEmbed } = require('discord.js')
 const { colors, log } = require('../../lib')
 
 module.exports = {
-  description: 'Get info about a kingdom or a user.',
   async run (bot, message, args) {
     message.channel.send('Version 1.1.4.6 - Order: `No args -> Mention / User ID -> Nickname Starts With -> Username starts with -> Kingdom Name`')
     const { users, kingdoms, general } = bot.db

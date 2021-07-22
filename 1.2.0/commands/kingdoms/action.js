@@ -3,7 +3,6 @@ const { MessageEmbed, Collection } = require('discord.js')
 const { cancel_cooldown } = require('../../lib')
 module.exports = {
   aliases: ['act'],
-  description: 'Do an action!',
   cooldown: '30s',
   async run (bot, message, args) {
     const { id: user_id } = message.author

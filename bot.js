@@ -51,3 +51,5 @@ bot.db.cooldowns2 = bot.db.createModel('cooldowns2')
 // Cooldowns
 bot.cooldowns = new Collection()
 bot.cooldowns2 = new Collection()
+
+module.exports = { bot }

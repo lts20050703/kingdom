@@ -8,8 +8,9 @@ const express = require('express')
 const app = express()
 const cookieParser = require('cookie-parser')
 app.use(cookieParser())
-const { db, general, sessions, users, kingdoms } = require('../../db')
-const { bot } = require('../../client')
+
+const { bot } = require('../../bot')
+const { general, sessions, users, kingdoms } = bot.db
 
 // Functions
 function getRandomString (length) {
@@ -241,16 +242,18 @@ app.use('/assets/img', express.static(join(__dirname, '../frontend/img')))
 // Oauth
 app.use('/api/discord', require('./api/discord'))
 
+const { log } = require('../../lib')
+
 // 500 Page
 app.use(function (err, req, res, next) {
-  console.log(`❌ [Website] Internal error for url ${req.url} Error: ${err}`)
+  log(0, `[Website] Internal error for url ${req.url} Error: ${err}`)
   res.status(err.status || 500).sendFile(join(__dirname, '../frontend/500.html'))
 })
 
 // 404 Page
 app.get('*', (req, res) => {
-  console.log(`❌ [Website] Page not found for url ${req.url}`)
   res.status(404).sendFile(join(__dirname, '../frontend/404.html'))
 })
+
 // Start webserver
-app.listen(3000, () => console.log('✅ [Website] Website started on port 3000.'))
+app.listen(3000, () => log(2, '[Website] Website started on port 3000.'))

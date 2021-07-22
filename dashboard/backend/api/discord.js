@@ -5,11 +5,11 @@ const { join } = require('path')
 // =-=-=-=-=-=-=
 const express = require('express')
 const cookieParser = require('cookie-parser')
-const home = '/home/runner/kingdoms/dashboard'
 const { catchAsync } = require('./utils')
 
 // Get database
-const { db, general, sessions, users, kingdoms } = require('../../../db')
+const { bot } = require('../../../bot')
+const { sessions } = bot.db
 
 // Express router
 const router = express.Router()

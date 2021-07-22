@@ -1,6 +1,6 @@
 const ms = require('ms')
 const { Collection } = require('discord.js')
-const { prefixes, owners } = require('../config')
+const { prefixes, owners } = require('../lib')
 
 module.exports = {
   async run (bot, message) {

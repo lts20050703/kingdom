@@ -1,5 +1,5 @@
 
-const { prefixes, colors } = require('../../config')
+const { prefixes, colors } = require('../../lib')
 
 module.exports = {
   async run (bot, message, args) {

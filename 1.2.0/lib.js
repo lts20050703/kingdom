@@ -16,9 +16,9 @@ module.exports = {
    */
   log (level, message) {
     switch (level) {
-      case 0: console.log(`${chalk.bold.hex('#FF0000')('[Error]:')} ${message}`); break
-      case 1: console.log(`${chalk.bold.hex('#FFFF00')('[Warn]: ')} ${message}`); break
-      case 2: console.log(`${chalk.bold.hex('#00FF00')('[Info]: ')} ${message}`); break
+      case 0: console.log(`${chalk.bold.hex('#000000').bgHex('#FF0000')(' [Error]: ')} ${message}`); break
+      case 1: console.log(`${chalk.bold.hex('#000000').bgHex('#FFFF00')(' [Warn]: ')} ${message}`); break
+      case 2: console.log(`${chalk.bold.hex('#000000').bgHex('#00FF00')(' [Info]: ')} ${message}`); break
     }
   },
   /**

@@ -1,5 +1,5 @@
 const ms = require('ms')
-const { prefixes } = require('../../config')
+const { prefixes } = require('../../lib')
 
 module.exports = {
   async run (bot, message, args) {

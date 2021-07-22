@@ -1,4 +1,4 @@
-const { log, prefixes } = require('../config')
+const { log, prefixes } = require('../lib')
 
 module.exports = {
   run (bot) {

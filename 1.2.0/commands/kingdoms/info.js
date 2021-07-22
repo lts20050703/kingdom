@@ -1,6 +1,6 @@
 const ms = require('ms')
 const { MessageEmbed } = require('discord.js')
-const { colors, log } = require('../../config')
+const { colors, log } = require('../../lib')
 
 module.exports = {
   description: 'Get info about a kingdom or a user.',

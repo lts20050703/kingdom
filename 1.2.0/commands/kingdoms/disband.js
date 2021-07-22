@@ -1,4 +1,4 @@
-const { prefixes, colors, cancel_cooldown } = require('../../config')
+const { prefixes, colors, cancel_cooldown } = require('../../lib')
 const { MessageButton } = require('discord-buttons')
 
 module.exports = {

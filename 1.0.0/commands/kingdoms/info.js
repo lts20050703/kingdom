@@ -1,4 +1,4 @@
-const { Command } = require('discord.js-commando')
+// const { Command } = require('discord.js-commando')
 const libraries = require('../../libraries.js')
 const { colors } = require('../../libraries')
 

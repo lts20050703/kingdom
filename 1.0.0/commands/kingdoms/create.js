@@ -10,7 +10,7 @@ function genID (length) {
   return ID
 }
 
-const { Command } = require('discord.js-commando')
+// const { Command } = require('discord.js-commando')
 
 module.exports = class create extends Command {
   constructor (client) {

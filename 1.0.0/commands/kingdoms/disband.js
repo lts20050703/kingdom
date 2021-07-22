@@ -1,7 +1,7 @@
 const { colors } = require('../../libraries')
 const { MessageButton } = require('discord-buttons')
 
-const { Command } = require('discord.js-commando')
+// const { Command } = require('discord.js-commando')
 
 module.exports = class create extends Command {
   constructor (client) {

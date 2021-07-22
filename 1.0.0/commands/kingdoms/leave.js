@@ -1,6 +1,6 @@
 const { colors } = require('../../libraries')
 
-const { Command } = require('discord.js-commando')
+// const { Command } = require('discord.js-commando')
 
 module.exports = class leave extends Command {
   constructor (client) {

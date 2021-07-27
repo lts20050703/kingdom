@@ -9,24 +9,24 @@ bot.login(process.env.token)
 // Discord Bot Events Handler
 const files = readdirSync('./events')
 for (const file of files) {
-  const event = require(`./events/${file}`)
-  if (!event.name) event.name = file.replace('.js', '')
-  if (event.run) bot.on(event.name, (...args) => event.run(bot, ...args))
-  else log(1, `[${file}] run () {} missing! The ${file.slice(0, -3)} event will NOT be handled!`)
+	const event = require(`./events/${file}`)
+	if (!event.name) event.name = file.replace('.js', '')
+	if (event.run) bot.on(event.name, (...args) => event.run(bot, ...args))
+	else log(1, `[${file}] run () {} missing! The ${file.slice(0, -3)} event will NOT be handled!`)
 }
 
 // Discord Bot Commands Handler
 bot.commands = new Collection()
 const folders = readdirSync('./commands')
 for (const folder of folders) {
-  const files = readdirSync(`./commands/${folder}`)
-  for (const file of files) {
-    const command = require(`./commands/${folder}/${file}`)
-    if (!command.group) command.group = folder
-    if (!command.name) command.name = file.replace('.js', '')
-    if (command.run) bot.commands.set(command.name, command)
-    else log(1, `[${file}] run () {} missing! The ${file.slice(0, -3)} command will NOT be handled`)
-  }
+	const files = readdirSync(`./commands/${folder}`)
+	for (const file of files) {
+		const command = require(`./commands/${folder}/${file}`)
+		if (!command.group) command.group = folder
+		if (!command.name) command.name = file.replace('.js', '')
+		if (command.run) bot.commands.set(command.name, command)
+		else log(1, `[${file}] run () {} missing! The ${file.slice(0, -3)} command will NOT be handled`)
+	}
 }
 
 // Discord Buttons

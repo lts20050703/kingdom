@@ -1,6 +1,6 @@
 // Bot
-require('dotenv').config()
-require('./bot')
+require('dotenv').config();
+require('./bot');
 
 // Website
-require('./dashboard/backend/index')
+require('./dashboard/backend/index');

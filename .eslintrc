@@ -3,6 +3,7 @@
 	"rules": {
 		"camelcase": "off",
 		"no-tabs": "off",
-		"indent": ["error", "tab"]
+		"indent": ["error", "tab"],
+		"semi": ["error", "always"]
 	}
 }

@@ -1,5 +1,5 @@
-const { MessageEmbed } = require('discord.js')
-const { owners } = require('../../lib')
+const { MessageEmbed } = require('discord.js');
+const { owners } = require('../../lib');
 
 module.exports = {
 	aliases: ['ver', 'v'],
@@ -26,8 +26,8 @@ module.exports = {
         'add a bunch of helper command like del (bulk delete messages) ping reload version (eval coming soon™️)\n' +
         'updated @[Admin] Real website code require() accordingly to file name changes\n' +
         'IT STILL WORKS! NOTHING BREAKS!')
-			)
-		case '1.2.0.1': return message.channel.send('Nothing changed.')
+			);
+		case '1.2.0.1': return message.channel.send('Nothing changed.');
 		default:
 			return message.channel.send(new MessageEmbed()
 				.setTimestamp()
@@ -35,7 +35,7 @@ module.exports = {
 				.setTitle('Kingdoms Version: 1.2.0.2')
 				.setDescription(`Kingdoms Developers: ${owners.map(owner => bot.users.cache.get(owner).tag).join(', ')}`)
 				.addField('Change Log:', 'Rename group test to group utils\nEslint Ignore 1.0.0')
-			)
+			);
 		}
 	}
-}
+};
